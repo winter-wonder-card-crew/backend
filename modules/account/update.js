@@ -36,7 +36,7 @@ async function userEdit(userId, jsonValue) {
     console.log(error);
     if (error.code == 11000)
     {
-      return [false,{message:"이미 가입된 이메일 주소 입니다."}]
+      return [false,{message:"이미 가입된 id 입니다."}]
     }
     else {
       return [false,{message:"알 수 없는 오류 입니다.(b)"}]

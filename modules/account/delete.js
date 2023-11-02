@@ -8,7 +8,7 @@ const userSchema = require('../../db/schemas/userSchema')
 async function UserDelete(id) {
   try {
     // 주어진 ID에 해당하는 유저 정보를 삭제한다
-    const data = await userSchema.findByIdAndRemove(id);
+    const data = await userSchema.findOneAndDelete(id);
 
     // 삭제된 데이터가 없는 경우 false 반환
     if (data === null) {
