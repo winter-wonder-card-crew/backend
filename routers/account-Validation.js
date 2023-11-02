@@ -4,11 +4,11 @@ const Joi = require("joi");
 const userCreateValidation = (req, res, next) => {
 	// Joi를 사용하여 데이터 유효성 검사를 위한 스키마 정의
 	const schema = Joi.object({
-		email: Joi.string().email().required(), // 이메일 형식, 필수 입력
+		email: Joi.string().email(), // 이메일 형식
 		name: Joi.string()
 			.max(11) // 최대 11자까지 허용
 			.required(), // 이름, 필수 입력
-		id: Joi.string(), // id
+		id: Joi.string().required(), // id
 		password: Joi.string(), // 비밀번호
 		phone: Joi.string(), // 전화번호
 	});

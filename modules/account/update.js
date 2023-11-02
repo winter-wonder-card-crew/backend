@@ -22,7 +22,8 @@ async function userEdit(userId, jsonValue) {
     jsonValue.password = HmacConvert(jsonValue.password);
       
     // 유저 데이터를 업데이트하고 수정된 항목 수를 가져온다
-    const data = await userSchema.updateOne({ "_id": userId }, jsonValue);
+    const data = await userSchema.updateOne({ "id": userId }, jsonValue);
+
 
     // 수정된 항목이 1개인 경우 수정 성공으로 간주하고 true 반환
     if (data.modifiedCount === 1) {
@@ -36,7 +37,7 @@ async function userEdit(userId, jsonValue) {
     console.log(error);
     if (error.code == 11000)
     {
-      return [false,{message:"이미 가입된 이메일 주소 입니다."}]
+      return [false,{message:"이미 가입된 id 입니다."}]
     }
     else {
       return [false,{message:"알 수 없는 오류 입니다.(b)"}]
