@@ -10,13 +10,17 @@ app.get('/', function(req, res){
 
 app.use('/', jennie);
 
-
+// Swagger UI 설정
+const swaggerUi = require('swagger-ui-express');
+const { specs } = require('./swagger/swagger.js');
 
 // 라우터 설정
 const conn = require('./db/connect/connect.js');// 몽고디비 연결 설정
 const accountRouter = require('./routers/account.js');// 사용자 기능 설정
 const passport = require("passport");                          // Passport 모듈
 const passportConfig = require('./modules/passport/index.js');  // Passport 
+
+const routeHandler = require('./modules/errorHandler/routeHandler.js')
 /**
  * Cross-Origin Resource Sharing (CORS) 설정
  * 다른 도메인에서의 요청을 허용하기 위해 CORS 설정을 적용
@@ -46,6 +50,12 @@ app.use(passport.initialize());
  */
 passportConfig();
 
+/**
+ * Swagger 사용 설정
+ * /api-docs 경로에 Swagger UI를 설정하여 API 문서를 표시함
+ */
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use(routeHandler)
 
 /**
  * MongoDB 연결
