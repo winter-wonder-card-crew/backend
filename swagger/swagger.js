@@ -26,7 +26,7 @@ const options = {
       version: '1.0.0',
       description: 'winterwonder API',
     },
-    host: 'localhost:3000',
+    host: 'localhost:8080',
     basePath: '/'
   },
   apis: ['./routers/*', './swagger/*', './app.js'] // API 문서를 생성할 대상 파일 경로들
