@@ -117,6 +117,7 @@ router.post(
 	async (req, res, next) => {
 		try {
 			res.status(200).json(req.user); // 로그인 성공 시 사용자 ID와 함께 응답
+			console.log('로그인 성공!')
 		} catch (error) {
 			console.log(error);
 			next({ code: 500 });
