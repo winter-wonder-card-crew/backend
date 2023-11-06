@@ -1,7 +1,7 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 const User = require("../db/schemas/userSchema");
-const HmacConvert = require('../modules/commons/passwordConvert');
+const HmacConvert = require("../modules/commons/passwordConvert");
 const router = express.Router();
 
 // Nodemailer를 사용하여 이메일 전송을 구성
@@ -69,12 +69,12 @@ router.post("/", async (req, res) => {
 				.json({ message: "이메일 전송에 실패했습니다" });
 		}
 
-	  // 새로운 비밀번호를 해싱합니다
-      const hashedPassword = HmacConvert(newPassword);
+		// 새로운 비밀번호를 해싱합니다
+		const hashedPassword = HmacConvert(newPassword);
 
-      // 사용자의 비밀번호를 업데이트합니다
-      user.password = hashedPassword;
-      await user.save();
+		// 사용자의 비밀번호를 업데이트합니다
+		user.password = hashedPassword;
+		await user.save();
 
 		return res
 			.status(200)
