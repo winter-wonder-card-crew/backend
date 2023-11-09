@@ -17,7 +17,6 @@ async function UserSearch(keyType, keyValue) {
     userData.email = data.email;
     userData.name = data.name;
     userData.id = data.id;
-    userData.phone = data.phone;
   });
   return userData;
 }

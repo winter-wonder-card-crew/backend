@@ -10,7 +10,6 @@ const userCreateValidation = (req, res, next) => {
 			.required(), // 이름, 필수 입력
 		id: Joi.string().required(), // id
 		password: Joi.string(), // 비밀번호
-		phone: Joi.string(), // 전화번호
 	});
 
 	// 요청 데이터를 정의한 스키마로 검증
@@ -32,7 +31,6 @@ const userUpdateValidation = (req, res, next) => {
 			.required(), // 이름, 필수 입력
 		id: Joi.string(), // 닉네임
 		password: Joi.string(), // 비밀번호
-		phone: Joi.string(), // 전화번호
 	});
 
 	// 요청 데이터를 정의한 스키마로 검증

@@ -25,8 +25,7 @@ const userSchema = new mongoose.Schema(
 			],
 			required: true, // 필수 필드
 		},
-		password: String,
-		phone: String, //phone Number 
+		password: String
 	},
 	{
 		versionKey: false,
