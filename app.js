@@ -8,7 +8,7 @@ app.get('/', function(req, res){
 });
 
 // CORS 설정: 다른 도메인에서의 요청을 허용하기 위해 CORS 설정을 적용
-app.use(cors());
+app.use(cors({ origin: '*' }));
 
 // JSON 파싱 설정: 요청의 본문을 JSON 형식으로 파싱하여 사용할 수 있도록 함
 app.use(express.json());

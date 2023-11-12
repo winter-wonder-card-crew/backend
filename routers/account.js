@@ -114,6 +114,7 @@ router.put(
 router.post(
 	"/login",
 	passport.authenticate("local-user", { session: false }),
+
 	async (req, res, next) => {
 		try {
 			res.status(200).json(req.user); // 로그인 성공 시 사용자 ID와 함께 응답
