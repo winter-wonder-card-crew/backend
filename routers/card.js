@@ -1,8 +1,9 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const cardService = require("../services/cardServices");
 
-// POST /api/v1/card - Create card
+// POST /card - Create card
 router.post("/", (req, res) => {
   const newCard = req.body;
   cardService
@@ -17,24 +18,31 @@ router.post("/", (req, res) => {
     });
 });
 
-// GET /api/v1/card/{cardId} - Get card
+// GET /card/{cardId} - Get card
 router.get("/:cardId", (req, res) => {
-  const cardId = req.params.cardId;
-  cardService
-    .getCardById(cardId)
-    .then((card) => {
-      if (!card) {
-        res.status(404).json({ message: "Card not found" });
-      } else {
-        res.status(200).json(card);
-      }
-    })
-    .catch((error) => {
-      res.status(400).json({ error: error.message });
-    });
+  const { cardId } = req.params;
+
+  try {
+    const cardObjectId = new mongoose.Types.ObjectId(cardId);
+
+    cardService
+      .getCardById(cardObjectId)
+      .then((card) => {
+        if (!card) {
+          res.status(404).json({ message: "Card not found" });
+        } else {
+          res.status(200).json(card);
+        }
+      })
+      .catch((error) => {
+        res.status(400).json({ error: error.message });
+      });
+  } catch (error) {
+    res.status(400).json({ error: "Invalid cardId format" });
+  }
 });
 
-// GET /api/v1/card - Get all cards
+// GET /card - Get all cards
 router.get("/", (req, res) => {
   cardService
     .getAllCards()
@@ -46,31 +54,51 @@ router.get("/", (req, res) => {
     });
 });
 
-// DELETE /api/v1/card/{cardId} - Delete card
-router.delete("/:cardId", (req, res) => {
+// DELETE /card/{cardId} - Delete card
+router.delete("/:cardId", async (req, res) => {
   const cardId = req.params.cardId;
-  cardService
-    .deleteCard(cardId)
-    .then(() => {
-      res.status(204).end();
-    })
-    .catch((error) => {
-      res.status(400).json({ error: error.message });
-    });
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(cardId)) {
+      throw new Error("Invalid cardId format");
+    }
+
+    const cardObjectId = new mongoose.Types.ObjectId(cardId); // 'new' 키워드 추가
+
+    console.log(cardId);
+
+    await cardService.deleteCard(cardObjectId);
+
+    res.status(200).json({ message: "카드가 삭제되었습니다." });
+  } catch (error) {
+    console.error(error); // 에러 로그 출력
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-// POST /api/v1/card/{cardId}/share - card share
+// POST /card/{cardId}/share - card share
 router.post("/:cardId/share", (req, res) => {
   const cardId = req.params.cardId;
   const recipient = req.body.recipient;
-  cardService
-    .shareCard(cardId, recipient)
-    .then((sharedCard) => {
-      res.status(200).json(sharedCard);
-    })
-    .catch((error) => {
-      res.status(400).json({ error: error.message });
-    });
+
+  try {
+    if (!mongoose.Types.ObjectId.isValid(cardId)) {
+      throw new Error("Invalid cardId format");
+    }
+
+    const cardObjectId = new mongoose.Types.ObjectId(cardId);
+
+    cardService
+      .shareCard(cardObjectId, recipient)
+      .then((sharedCard) => {
+        res.status(200).json(sharedCard);
+      })
+      .catch((error) => {
+        res.status(400).json({ error: error.message });
+      });
+  } catch (error) {
+    res.status(400).json({ error: "Invalid cardId format" });
+  }
 });
 
 module.exports = router;

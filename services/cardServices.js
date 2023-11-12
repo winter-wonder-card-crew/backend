@@ -1,4 +1,5 @@
 const Card = require("../db/schemas/cardSchema");
+const mongoose = require("mongoose");
 
 // Create card
 function createCard(cardData) {
@@ -7,13 +8,30 @@ function createCard(cardData) {
 
 // Get card
 function getCardById(cardId) {
-  return Card.findById(cardId);
+  return Card.findById(cardId)
+    .then((card) => {
+      if (!card) {
+        throw new Error("Card not found");
+      }
+      return card;
+    })
+    .catch((error) => {
+      throw error; // 에러를 다시 던지는 것은 여기서 필요하지 않을 수 있습니다.
+    });
 }
 
-// Delete card
-function deleteCard(cardId) {
-  return Card.findByIdAndRemove(cardId);
-}
+const deleteCard = async (cardId) => {
+  try {
+    // findByIdAndDelete로 변경
+    const result = await Card.findByIdAndDelete(cardId);
+
+    if (!result) {
+      throw new Error("Card not found");
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 
 // Share card
 function shareCard(cardId, recipient) {
@@ -21,7 +39,12 @@ function shareCard(cardId, recipient) {
     cardId,
     { $set: { receiver: recipient } },
     { new: true }
-  );
+  ).then((updatedCard) => {
+    if (!updatedCard) {
+      throw new Error("Card not found");
+    }
+    return updatedCard;
+  });
 }
 
 // Get all cards
